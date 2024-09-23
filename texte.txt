@@ -1,0 +1,23 @@
+  // const { success, error } = await database.prepare(`insert into Auteur (
+  //     ID,
+  //     name,
+  //     surname,
+  //     email,
+  //     tel,
+  //     socialNetwork,
+  //     createdAt
+  //     updatedAt
+  // ) values (?, ?, ?, ?, ?, ?, ?, ?);`)
+  // .bind(request.ID, request.name,request.surname, request.email, request.tel, request.socialNetwork, Date.now(), Date.now())
+  // .run()
+
+  // if (success) {
+  //     const { results } = await database.prepare(`select * from Auteur where ID = ?;`).bind(request.ID).all()
+  //     return json(results)
+  // }
+
+  // if(error) {
+  //     console.log(error)
+  //     return json({ error }, 500)
+  // }
+  // return text("il a save")

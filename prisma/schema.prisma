@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Auteur {
+  ID            String    @id @default(uuid())
+  name          String
+  surname       String
+  email         String
+  tel           String
+  socialNetwork String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  Article       Article[]
+  Podcast       Podcast[]
+  Video         Video[]
+}
+
+model Rubrique {
+  ID      String    @id @unique @default(uuid())
+  name    String
+  Article Article[]
+  Video   Video[]
+}
+
+model User {
+  ID            String   @id @default(uuid())
+  name          String
+  photo         String
+  email         String
+  token         String
+  googleAccount String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Images {
+  ID           String   @id @default(uuid())
+  name         String   @unique
+  size         Int
+  minetype     String
+  lastmodified Int
+  originalname String
+  path         String
+  createdAt    DateTime @default(now())
+}
+
+model Article {
+  ID         String   @id @default(uuid())
+  titre      String
+  slug       String   @unique
+  contenu    String
+  image      String
+  rubrique   Rubrique @relation(fields: [rubriqueID], references: [ID])
+  rubriqueID String
+  lecture    Int
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Auteur      Auteur        @relation(fields: [auteurID], references: [ID])
+  auteurID    String
+  Commentaire Commentaire[]
+}
+
+model Audio {
+  ID        String    @id @default(uuid())
+  name      String    @unique
+  format    String
+  taille    Int
+  createdAt DateTime  @default(now())
+  metadata  String
+  url       String
+  Podcast   Podcast[]
+}
+
+model Commentaire {
+  ID String @id @default(uuid())
+
+  contenu   String
+  articleID String?
+  podcastID String?
+  videoID   String?
+
+  video   Video?   @relation(fields: [videoID], references: [ID])
+  article Article? @relation(fields: [articleID], references: [ID])
+  podcast Podcast? @relation(fields: [podcastID], references: [ID])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Podcast {
+  ID        String   @id @default(uuid())
+  titre     String
+  slug      String
+  audio     Audio    @relation(fields: [audioID], references: [ID])
+  audioID   String
+  ecoute    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  auteurID    String
+  auteur      Auteur        @relation(fields: [auteurID], references: [ID])
+  Commentaire Commentaire[]
+}
+
+model Video {
+  ID          String   @id @default(uuid())
+  name        String
+  titre       String
+  description String
+  auteurID    String
+  auteur      Auteur   @relation(fields: [auteurID], references: [ID])
+  rubriqueID  String
+  rubrique    Rubrique @relation(fields: [rubriqueID], references: [ID])
+  vu          Int
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Commentaire Commentaire[]
+}

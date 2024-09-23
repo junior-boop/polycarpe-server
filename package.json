@@ -1,0 +1,21 @@
+{
+  "name": "serveur-js",
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts",
+    "prisma:d1": "bunx wrangler d1 migrations create policarpeDB create_data_table",
+    "prisma:generate": "bunx prisma generate",
+    "prisma:migration": "bunx prisma migrate diff --from-empty --to-schema-datamodel ./prisma/schema.prisma --script --output prisma/migrations/0001_create_data_table.sql",
+    "migration:local": "bunx wrangler d1 migrations apply policarpeDB --local"
+  },
+  "dependencies": {
+    "@prisma/adapter-d1": "^5.19.1",
+    "@prisma/client": "^5.19.1",
+    "hono": "^4.6.2"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240529.0",
+    "prisma": "^5.19.1",
+    "wrangler": "^3.57.2"
+  }
+}
